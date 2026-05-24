@@ -312,13 +312,34 @@ button {
 /* Слайд целиком */
 .hero__slide {
     position: relative;
-    background-size: cover;
-    background-position: center right;
-    background-repeat: no-repeat;
+    /* Обязательно для абсолютного позиционирования картинки внутри */
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    /* Если у тебя здесь стоял background-size: cover и т.д. — их можно удалить */
+}
+
+/* Новые стили для фонового тега img */
+.hero__slide-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Полный аналог background-size: cover */
+    object-position: center;
+    /* Аналог background-position: center */
+    z-index: 1;
+    /* Уходит на самый нижний слой внутри слайда */
+}
+
+/* Убедись, что контейнер с контентом стоит выше картинки */
+.hero__container {
+    position: relative;
+    z-index: 2;
+    /* Поднимаем текст, кнопки и стрелки над картинкой */
 }
 
 /* Градиентный оверлей на слайд для читаемости текста */
@@ -331,14 +352,6 @@ button {
     height: 100%;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
     z-index: 1;
-}
-
-.hero__container {
-    position: relative;
-    width: 100%;
-    z-index: 2;
-    display: flex;
-    align-items: center;
 }
 
 /* Контентная часть слева */
@@ -563,17 +576,32 @@ button {
 }
 
 .promo-card {
-    width: 100%;
-    /* Фиксируем соотношение сторон (ширина / высота), чтобы карточки пропорционально масштабировались */
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    /* Твоё скругление углов для карточек */
+
+    /* Задаем пропорциональную высоту карточки через aspect-ratio, 
+       чтобы она идеально масштабировалась на любых экранах. 
+       Например, если оригинальная картинка примерно 380x140px, соотношение будет: */
     aspect-ratio: 374 / 240;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 12px;
-    /* Скругление углов как на макете */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-    /* Легкая мягкая тень */
-    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+
+    /* Если aspect-ratio использовать не хочешь, можно оставить фиксированную высоту, которая у тебя была, например:
+    height: 140px; 
+    */
+}
+
+/* Новые стили для ленивого фона */
+.promo-card__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Заполняет всю карточку без искажений */
+    object-position: center;
+    display: block;
 }
 
 /* Легкий интерактив при наведении на десктопе */
@@ -619,15 +647,38 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    /* Свойства background-image, background-size и т.д. удалены */
     border-radius: 12px;
     overflow: hidden;
     padding: 30px;
     min-height: 250px;
     text-decoration: none;
     transition: transform var(--transition-speed) ease;
+}
+
+/* Новый класс для оптимизированной фоновой картинки */
+.direction-card__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Полный аналог background-size: cover */
+    object-position: center;
+    object-fit: cover;
+    z-index: 1;
+    /* Картинка ложится на самое дно карточки */
+    display: block;
+    transition: transform var(--transition-speed) ease;
+    /* Если захочешь сделать эффект зума при ховере */
+}
+
+/* Поднимаем текстовое содержимое выше картинки */
+
+/* Опционально: красивый эффект приближения картинки при наведении на карточку */
+.direction-card:hover .direction-card__bg {
+    transform: scale(1.03);
 }
 
 /* Затемняющий оверлей */
@@ -641,6 +692,7 @@ button {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.1) 100%);
     z-index: 1;
     transition: opacity var(--transition-speed) ease;
+    z-index: 2;
 }
 
 .direction-card__content {
@@ -648,6 +700,8 @@ button {
     z-index: 2;
     color: #fff;
     max-width: 85%;
+    position: relative;
+    z-index: 2;
 }
 
 .direction-card__title {
@@ -673,6 +727,7 @@ button {
     object-fit: contain;
     z-index: 2;
     transition: transform var(--transition-speed) ease;
+    z-index: 2;
 }
 
 
@@ -1123,19 +1178,30 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    /* Убрали background свойства */
     border-radius: 12px;
     overflow: hidden;
     padding: 30px;
     min-height: clamp(320px, 40vh, 380px);
-    /* Хорошая пропорциональная высота */
     text-decoration: none;
     transition: transform var(--transition-speed) ease;
 }
 
-/* Затемняющий градиент для читаемости белого текста */
+/* Новая фоновая картинка — на самый нижний слой */
+.component-card__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1;
+    /* Самый первый слой */
+    display: block;
+}
+
+/* Затемняющий градиент — ложится ПОВЕРХ картинки */
 .component-card::before {
     content: '';
     position: absolute;
@@ -1144,23 +1210,30 @@ button {
     width: 100%;
     height: 100%;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0) 100%);
-    z-index: 1;
+    z-index: 2;
+    /* Выше картинки, но ниже текста */
     transition: opacity var(--transition-speed) ease;
 }
 
-/* Контент поверх оверлея */
+/* Контент — поверх градиента */
 .component-card__content {
     position: relative;
-    z-index: 2;
-    color: #fff;
-    max-width: 85%;
-    /* Оставляем место под стрелку справа */
+    z-index: 3;
+    /* Самый верхний слой */
+}
+
+/* Стрелочка — тоже на самый верхний слой */
+.component-card__arrow {
+    position: absolute;
+    /* или relative, в зависимости от твоего позиционирования */
+    z-index: 3;
 }
 
 .component-card__name {
     font-size: clamp(18px, 2vw, 22px);
     font-weight: 600;
     line-height: 1.3;
+    color: #ffffff;
 }
 
 .component-card__text {
