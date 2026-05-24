@@ -1869,7 +1869,7 @@ button {
     height: clamp(300px, 45vh, 450px);
     /* Отличная пропорциональная высота */
     border-radius: 16px;
-    /* Скругление углов карты по макету */
+
     overflow: hidden;
     border: 1px solid #d0e3f5;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
