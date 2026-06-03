@@ -671,15 +671,11 @@ button {
     /* Картинка ложится на самое дно карточки */
     display: block;
     transition: transform var(--transition-speed) ease;
+    border-radius: 0 0 24px 0;
     /* Если захочешь сделать эффект зума при ховере */
 }
 
 /* Поднимаем текстовое содержимое выше картинки */
-
-/* Опционально: красивый эффект приближения картинки при наведении на карточку */
-.direction-card:hover .direction-card__bg {
-    transform: scale(1.03);
-}
 
 /* Затемняющий оверлей */
 .direction-card::before {
@@ -690,14 +686,14 @@ button {
     width: 100%;
     height: 100%;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.1) 100%);
-    z-index: 1;
-    transition: opacity var(--transition-speed) ease;
     z-index: 2;
+    border-radius: 0 0 24px 0;
+    transition: opacity var(--transition-speed) ease;
 }
 
 .direction-card__content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     color: #fff;
     max-width: 85%;
     position: relative;
@@ -720,14 +716,13 @@ button {
 /* Стрелка строго 50x50px в правом нижнем углу */
 .direction-card__arrow {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 0px;
+    right: 0px;
     width: 50px;
     height: 50px;
-    object-fit: contain;
-    z-index: 2;
+    object-fit: cover;
+    z-index: 5;
     transition: transform var(--transition-speed) ease;
-    z-index: 2;
 }
 
 
@@ -770,17 +765,12 @@ button {
 
 /* Ховер эффекты */
 @media (min-width: 1025px) {
-    .direction-card:hover {
-        transform: translateY(-2px);
-    }
 
     .direction-card:hover::before {
         opacity: 0.85;
     }
 
-    .direction-card:hover .direction-card__arrow {
-        transform: scale(1.05);
-    }
+
 }
 
 /* Адаптив под мобилки */
@@ -1199,6 +1189,7 @@ button {
     z-index: 1;
     /* Самый первый слой */
     display: block;
+    border-radius: 0 0 24px 0;
 }
 
 /* Затемняющий градиент — ложится ПОВЕРХ картинки */
@@ -1213,6 +1204,7 @@ button {
     z-index: 2;
     /* Выше картинки, но ниже текста */
     transition: opacity var(--transition-speed) ease;
+    border-radius: 0 0 24px 0;
 }
 
 /* Контент — поверх градиента */
@@ -1257,17 +1249,11 @@ button {
 
 /* Эффекты при наведении */
 @media (min-width: 1025px) {
-    .component-card:hover {
-        transform: translateY(-4px);
-    }
 
     .component-card:hover::before {
         opacity: 0.85;
     }
 
-    .component-card:hover .component-card__arrow {
-        transform: scale(1.05);
-    }
 }
 
 /* Адаптив для планшетов и мобилок */
@@ -1279,6 +1265,10 @@ button {
     .component-card {
         padding: 20px;
         min-height: 280px;
+    }
+
+    .component-card__text {
+        display: none;
     }
 }
 
@@ -1314,8 +1304,8 @@ button {
 /* Главный макет контента */
 .about-content {
     display: flex;
-    justify-content: space-between;
-    gap: clamp(30px, 5vw, 60px);
+    flex-direction: column;
+    gap: 24px;
 }
 
 /* Левая текстовая колонка */
@@ -1340,14 +1330,6 @@ button {
     margin: 25px 0 0 0;
 }
 
-/* Правая колонка (Цифры + Профиль) */
-.about-content__side {
-    flex: 1;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-}
 
 /* Сетка преимуществ 2х2 */
 .about-stats {
@@ -1383,6 +1365,78 @@ button {
     gap: 15px;
     margin-top: auto;
     /* Прижимает к низу колонки при избытке текста слева */
+}
+
+/* Контейнер для фото справа */
+.about-content__photo-wrap {
+    width: 100%;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 300px;
+    /* Фиксированная высота для 1/4 блока */
+}
+
+.about-content__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.about-section__image {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+
+    img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    @media (max-width: 960px) {
+        width: 100%;
+        aspect-ratio: 3 / 4;
+    }
+}
+
+.about-section__main {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 48px;
+
+    @media (max-width: 960px) {
+        grid-template-columns: 100%;
+        gap: 24px;
+    }
+}
+
+/* Настройка правой колонки для размещения фото */
+.about-content__side {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    width: 100%;
+
+    @media (max-width: 960px) {
+        flex-direction: column;
+        gap: 24px;
+    }
+}
+
+/* Адаптив */
+@media (max-width: 992px) {
+    .about-content__side {
+        max-width: 100%;
+    }
+
+    .about-content__photo-wrap {
+        height: 250px;
+    }
 }
 
 /* Подложка под круглую аватарку */
@@ -1454,6 +1508,50 @@ button {
     padding: clamp(40px, 6vw, 80px) 0;
     background-color: #f8fafc;
     /* Легкий фоновый оттенок, чтобы выделить белую плашку */
+}
+
+/* Обертка для двух колонок */
+.seo-card__wrapper {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* 75% текста */
+.seo-card__main {
+    flex: 0 0 75%;
+}
+
+/* 25% фото */
+.seo-card__aside {
+    flex: 0 0 25%;
+}
+
+/* Оптимизация картинки */
+.seo-card__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+    /* Минимальная высота, чтобы блок не схлопывался */
+    min-height: 250px;
+}
+
+/* Адаптив для этой конкретной секции */
+@media (max-width: 992px) {
+    .seo-card__wrapper {
+        flex-direction: column;
+    }
+
+    .seo-card__main,
+    .seo-card__aside {
+        flex: 0 0 100%;
+    }
+
+    .seo-card__photo {
+        max-height: 300px;
+    }
 }
 
 /* Белая карточка с рамкой */
